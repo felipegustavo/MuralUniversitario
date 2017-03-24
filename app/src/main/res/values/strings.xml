@@ -1,3 +1,19 @@
 <resources>
-    <string name="app_name">MuralUniversitario</string>
+    <string name="app_name">Mural Universitário</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="menu_events">Eventos</string>
+    <string name="menu_institutions">Instituições</string>
+    <string name="menu_categories">Categorias</string>
+    <string name="menu_about">Sobre</string>
+
+    <string name="title_activity_about">Sobre</string>
+    <string name="title_activity_event">Detalhes do Evento</string>
+    <string name="title_activity_categories">Categorias de Eventos</string>
+    <string name="title_activity_institutions">Instituições dos Eventos</string>
+    <string name="btn_select_all">Selecionar tudo</string>
+    <string name="btn_deselect_all">Deselecionar tudo</string>
+    <string name="txt_search_hint">Pesquisar</string>
 </resources>
