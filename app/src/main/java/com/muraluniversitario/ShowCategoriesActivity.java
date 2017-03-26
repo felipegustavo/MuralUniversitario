@@ -88,7 +88,6 @@ public class ShowCategoriesActivity extends BaseActivity {
     }
 
     private class CustomAdapter extends ArrayAdapter<Category> {
-
         private List<Category> categoryList;
 
         public CustomAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<Category> categoryList) {

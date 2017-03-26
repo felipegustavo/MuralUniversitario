@@ -2,12 +2,14 @@ package com.muraluniversitario;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.constraint.solver.SolverVariable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MenuInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -20,8 +22,11 @@ import android.view.MenuItem;
 import android.view.ViewStub;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -37,6 +42,7 @@ import com.muraluniversitario.model.Event;
 import com.muraluniversitario.model.Institution;
 import com.muraluniversitario.service.EventWS;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -50,13 +56,30 @@ import java.lang.reflect.Type;
 
 public class MainActivity extends BaseActivity {
 
-    private CategoryDAO categoryDAO;
-    private InstitutionDAO institutionDAO;
-    private List<Event> events;
+    private CategoryDAO categoryDAO = new CategoryDAO(this);
+    private InstitutionDAO institutionDAO = new InstitutionDAO(this);
+    private List<Event> events = new ArrayList<Event>();
+
+    private ListView listView = null;
 
     public static void hideSoftKeyboard (Activity activity, View view) {
         InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.activity_main_actionbar, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_reload) {
+            loadData();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -67,58 +90,63 @@ public class MainActivity extends BaseActivity {
         stub.setLayoutResource(R.layout.content_main);
         View inflated = stub.inflate();
 
-        final Button btnSearch = (Button) findViewById(R.id.btn_search_events);
-        final EditText txtSearch = (EditText) findViewById(R.id.txt_search_events);
+        loadData();
+    }
 
-        categoryDAO = new CategoryDAO(this);
-        institutionDAO = new InstitutionDAO(this);
-
+    public void loadData() {
         GsonBuilder builder = new GsonBuilder();
-
-        builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
-            public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                return new Date(json.getAsJsonPrimitive().getAsLong());
-            }
-        });
 
         final Gson gson = builder.create();
 
-        btnSearch.setOnClickListener(new View.OnClickListener() {
+        List<String> categories = categoryDAO.getSelecteds();
+        List<String> institutions = institutionDAO.getSelecteds();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://10.0.2.2:8080/mural-universitario/rest/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        final EventWS service = retrofit.create(EventWS.class);
+        Call<List<Event>> getEventsService = service.getEvents(categories, institutions);
+
+        getEventsService.enqueue(new Callback<List<Event>>() {
             @Override
-            public void onClick(View v) {
-                txtSearch.clearFocus();
-                hideSoftKeyboard(MainActivity.this, v);
+            public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
+                events.clear();
 
-                List<String> categories = categoryDAO.getSelecteds();
-                List<String> institutions = institutionDAO.getSelecteds();
+                if (response.body() != null) {
+                    events.addAll(response.body());
+                    displayListView();
+                }
 
-                Log.w(this.getClass().getName(), categories.size()+" "+institutions.size());
+                for (Event e : events) {
+                    Log.w(this.getClass().getName(), e.getName());
+                }
+            }
 
-                Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl("http://192.168.0.127:8089/mural-universitario/rest/")
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-
-                final EventWS service = retrofit.create(EventWS.class);
-                Call<List<Event>> getEventsService = service.getEvents(categories, institutions);
-
-                getEventsService.enqueue(new Callback<List<Event>>() {
-                    @Override
-                    public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
-                        events = response.body();
-                        for (Event e : events) {
-                            Log.i(this.getClass().getName(), "Teste:"+e.getId());
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<List<Event>> call, Throwable t) {
-                        t.printStackTrace();
-                    }
-                });
+            @Override
+            public void onFailure(Call<List<Event>> call, Throwable t) {
+                t.printStackTrace();
             }
         });
+    }
 
+    public void displayListView() {
+        listView = (ListView) findViewById(R.id.listview_events);
+        ArrayAdapter<Event> eventHistory = new ArrayAdapter<Event>(this, R.layout.event_info_simple,
+                R.id.text_institution, events);
+
+        listView.setAdapter(eventHistory);
+        final Intent intent = new Intent(this, EventDetailsActivity.class);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Event event = (Event) parent.getItemAtPosition(position);
+                intent.putExtra("event_id", event.getId());
+                startActivity(intent);
+            }
+        });
     }
 
 }

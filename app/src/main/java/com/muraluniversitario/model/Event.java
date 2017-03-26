@@ -115,4 +115,8 @@ public class Event implements Serializable {
         this.institutions = institutions;
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
 }

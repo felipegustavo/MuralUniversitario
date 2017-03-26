@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.muraluniversitario.EventDetailsActivity"
+    tools:showIn="@layout/app_bar_main">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="vertical" android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/event_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="15dp"
+                android:clickable="true"/>
+
+            <TextView
+                android:id="@+id/event_name"
+                android:layout_width="match_parent"
+                android:textSize="30dp"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"/>
+
+            <TextView
+                android:id="@+id/event_description"
+                android:layout_width="match_parent"
+                android:textSize="25dp"
+                android:layout_height="wrap_content"
+                android:padding="5dp"/>
+
+            <TextView
+                android:id="@+id/event_place"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="25dp"
+                android:drawableLeft="@drawable/ic_map_marker"
+                android:clickable="true"
+                android:padding="5dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:textSize="25dp"
+                    android:textStyle="bold"
+                    android:text="@string/event_begin"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/event_begin"
+                    android:layout_width="wrap_content"
+                    android:textSize="25dp"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:textSize="25dp"
+                    android:textStyle="bold"
+                    android:text="@string/event_end"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/event_end"
+                    android:layout_width="wrap_content"
+                    android:textSize="25dp"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:textSize="25dp"
+                    android:textStyle="bold"
+                    android:text="@string/event_price"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/event_price"
+                    android:layout_width="match_parent"
+                    android:textSize="25dp"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginTop="15dp">
+
+                <ImageView
+                    android:id="@+id/event_facebook"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:src="@drawable/ic_facebook" />
+
+                <ImageView
+                    android:id="@+id/event_website"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:src="@drawable/ic_internet_explorer" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</android.support.constraint.ConstraintLayout>

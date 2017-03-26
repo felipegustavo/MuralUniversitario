@@ -53,18 +53,14 @@ abstract class BaseActivity extends AppCompatActivity
 
         if (id == R.id.nav_event) {
             target = MainActivity.class;
-        } else if (id == R.id.nav_about) {
-            target = AboutActivity.class;
         } else if (id == R.id.nav_category) {
             target = ShowCategoriesActivity.class;
         } else if (id == R.id.nav_institution) {
             target = ShowInstitutionsActivity.class;
         }
 
-        if (!target.getName().equals(this.getClass().getName())) {
-            Intent intent = new Intent(this, target);
-            startActivity(intent);
-        }
+        Intent intent = new Intent(this, target);
+        startActivity(intent);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
