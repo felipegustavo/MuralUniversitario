@@ -131,6 +131,17 @@ public class EventDetailsActivity extends BaseActivity {
         end.setText(dateFormat.format(event.getEnd()));
         price.setText(event.getPrice());
 
+        final Intent intentPlace = new Intent(this, MapsActivity.class);
+        intentPlace.putExtra("place", event.getPlace());
+        intentPlace.putExtra("event", event.getName());
+
+        place.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(intentPlace);
+            }
+        });
+
         facebook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
